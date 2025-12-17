@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Surprise For You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        /* BASE STYLES */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #fad0c4 0%, #ffd1ff 100%);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden; /* Prevents scrollbars from floating hearts */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* FLOATING HEARTS ANIMATION */
+        .heart-bg {
+            position: absolute;
+            bottom: -20px;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            animation: floatUp linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            20% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        }
+
+        /* SCREENS */
+        .screen {
+            position: absolute;
+            z-index: 10;
+            text-align: center;
+            transition: opacity 1s ease-in-out;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+            display: none;
+        }
+
+        /* SCREEN 1: LOGIN/INPUT */
+        .login-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        h2 { color: #555; margin-bottom: 20px; font-weight: 300; }
+        
+        input {
+            width: 80%;
+            padding: 15px;
+            border: 2px solid #ff9a9e;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            outline: none;
+            text-align: center;
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-enter {
+            background: #ff758c;
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-enter:hover { background: #ff4d6d; transform: scale(1.05); }
+
+        /* SCREEN 2: PROPOSAL */
+        .proposal-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px 20px;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(255, 77, 109, 0.3);
+            border: 2px solid #fff;
+        }
+
+        .main-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: #ff4d6d;
+            margin: 0;
+            line-height: 1.2;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .message {
+            font-size: 1.1rem;
+            color: #666;
+            margin: 20px 0 40px 0;
+        }
+
+        /* BUTTONS AREA */
+        .btn-group {
+            position: relative;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn-yes {
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+            transition: 0.3s;
+        }
+
+        .btn-yes:hover { transform: scale(1.1); background: #e03e5d; }
+
+        .btn-no {
+            background: #f1f1f1;
+            color: #333;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            position: absolute; /* Allows moving freely */
+        }
+
+        /* SUCCESS MESSAGE */
+        .final-msg {
+            display: none;
+            margin-top: 20px;
+        }
+        
+        .final-msg h3 {
+            color: #ff4d6d;
+            font-size: 2rem;
+            font-family: 'Great Vibes', cursive;
+        }
+
+        /* GIF CONTAINER */
+        .gif-container img {
+            width: 150px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="screen-login" class="screen">
+        <div class="login-box">
+            <div class="gif-container">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2QyZzZ4N3B6b3ljaHg4a2J4a3B6b3ljaHg4a2J4a3B6b3ljaHg4a2J4ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/duNowZaVjiDY5rJ1tJ/giphy.gif" alt="Cute waiting">
+            </div>
+            <h2>Enter your Name!!😍❤️❤️</h2>
+            <input type="text" id="nameInput" placeholder="Type your name here...">
+            <br>
+            <button class="btn-enter" onclick="revealSurprise()">Enter</button>
+        </div>
+    </div>
+
+    <div id="screen-proposal" class="screen hidden">
+        <div class="proposal-card">
+            <h1 class="main-title">Hello, <span id="herName">Love</span>! ❤️</h1>
+            
+            <p class="message">
+                You make my world brighter every single day.<br>
+                I have a very important question...
+            </p>
+
+            <h2 style="color: #333; margin-bottom: 30px;">Will you be mine forever?</h2>
+
+            <div class="btn-group">
+                <button class="btn-yes" onclick="acceptLove()">YES!</button>
+                <button class="btn-no" id="btnNo" onmouseover="moveButton()" onclick="moveButton()">No</button>
+            </div>
+
+            <div class="final-msg" id="finalMsg">
+                <h3>I knew you were the one! 💖</h3>
+                <img src="https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif" style="width: 100%; border-radius: 10px; margin-top:10px;">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. BACKGROUND FLOATING HEARTS LOGIC
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-bg');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's'; // 3-5 seconds
+            
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+        setInterval(createHeart, 300); // Create a heart every 300ms
+
+        // 2. REVEAL SURPRISE LOGIC
+        function revealSurprise() {
+            var name = document.getElementById('nameInput').value;
+            if (name.trim() === "") {
+                alert("Please enter your beautiful name first! 🥺");
+                return;
+            }
+
+            // Update the greeting text
+            document.getElementById('herName').innerText = name;
+
+            // Fade out login, Show Proposal
+            document.getElementById('screen-login').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('screen-login').style.display = 'none';
+                document.getElementById('screen-proposal').style.display = 'block';
+                // Small delay to allow display:block to apply before opacity transition
+                setTimeout(() => {
+                    document.getElementById('screen-proposal').classList.remove('hidden');
+                    document.getElementById('screen-proposal').style.opacity = '1';
+                }, 50);
+            }, 1000);
+        }
+
+        // 3. RUNAWAY NO BUTTON LOGIC
+        function moveButton() {
+            var x = Math.random() * (window.innerWidth - 100); // 100 is approx button width
+            var y = Math.random() * (window.innerHeight - 100);
+            var btn = document.getElementById('btnNo');
+            
+            // Apply Fixed position so it can go anywhere on screen relative to viewport
+            btn.style.position = 'fixed'; 
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+        // 4. SHE SAID YES LOGIC
+        function acceptLove() {
+            // Hide buttons
+            document.querySelector('.btn-group').style.display = 'none';
+            document.querySelector('.message').style.display = 'none';
+            document.querySelector('h2').style.display = 'none';
+            
+            // Show Success Message
+            document.getElementById('finalMsg').style.display = 'block';
+
+            // EXPLOSION of Confetti
+            var duration = 15 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            var random = function(min, max) { return Math.random() * (max - min) + min; }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                // Create confetti from left and right
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: random(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: random(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+            
+            // Additional Heart burst
+            confetti({
+                shapes: ['heart'],
+                colors: ['#FFC0CB', '#FF69B4', '#FF1493', '#C71585'],
+                scalar: 2,
+                particleCount: 50,
+                spread: 100,
+                origin: { y: 0.6 }
+            });
+        }
+    </script>
+</body>
+</html>
